@@ -6,6 +6,13 @@
 
 namespace kaleidoscope {
 
+  void Lexer::operator()(std::iostream& ss) {
+    char token;
+    while ((token = gettok(ss)) != Token::tok_eof) {
+      _parse_cb(token);
+    }
+  }
+
   int Lexer::gettok(std::iostream& ss) {
     _last_char = ss.get();
 
