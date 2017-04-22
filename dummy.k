@@ -1,6 +1,6 @@
 
 # this is a comment
-def fib (x)
+def fib(x)
   0
 
 fib(40)

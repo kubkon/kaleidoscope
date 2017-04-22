@@ -17,6 +17,7 @@ namespace kaleidoscope {
       _token_value.identifier_str = _last_char;
       while (isalnum((_last_char = _stream.get())))
         _token_value.identifier_str += _last_char;
+      _stream.unget();
 
       if (_token_value.identifier_str == "def")
         return tok_def;
