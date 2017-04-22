@@ -28,6 +28,10 @@ namespace kaleidoscope {
 
     Lexer(std::iostream& stream) : _stream(stream), _token_value(), _last_char(0) {}
 
+    const TokenValue& token_value() const {
+      return _token_value;
+    }
+
     int gettok();
 
   private:

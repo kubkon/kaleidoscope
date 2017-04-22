@@ -1,6 +1,8 @@
 #pragma once
 
+#include "ast.h"
 #include "lexer.h"
+#include <memory>
 
 namespace kaleidoscope {
   class Parser {
@@ -13,6 +15,12 @@ namespace kaleidoscope {
     char _cur_token;
 
     int get_next_token() { return _cur_token = _lexer.gettok(); }
+
+    std::unique_ptr<ExprAST> log_error(const char* str);
+    std::unique_ptr<PrototypeAST> log_error_p(const char* str);
+
+    std::unique_ptr<PrototypeAST> parse_proto();
+    std::unique_ptr<FunctionAST> parse_def();
   };
 }
 

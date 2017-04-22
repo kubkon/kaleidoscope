@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace kaleidoscope {
 
@@ -13,7 +14,7 @@ namespace kaleidoscope {
   class NumberExprAST : public ExprAST {
     double _val;
   public:
-    NumberExprAST(double val) : val(_val) {}
+    NumberExprAST(double val) : _val(val) {}
   };
 
   class VariableExprAST : public ExprAST {
@@ -44,7 +45,7 @@ namespace kaleidoscope {
   public:
     PrototypeAST(const std::string& name, std::vector<std::string> args) : _name(name), _args(std::move(args)) {}
 
-    const string& name() const { return _name; }
+    const std::string& name() const { return _name; }
   };
 
   class FunctionAST {
