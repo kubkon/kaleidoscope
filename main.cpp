@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
   std::cout << "Reading file: " << argv[1] << "...\n";
   
   Parser parser;
-  Lexer lexer([&parser](char token) { parser(token); });
+  Lexer lexer([&parser](char token, Lexer::TokenValue tok_value) { parser(token, tok_value); });
   lexer(f);
 
   f.close();

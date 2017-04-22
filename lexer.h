@@ -21,21 +21,20 @@ namespace kaleidoscope {
       tok_number = -5,
     };
 
-    Lexer(std::function<void(char)> parse_cb) : _parse_cb(parse_cb), _identifier_str(""), _num_val(0.0), _last_char(0) {}
+    struct TokenValue {
+      std::string identifier_str;
+      double num_val;
 
-    std::string identifier_str() const {
-      return _identifier_str;
-    }
-    double num_val() const {
-      return _num_val;
-    }
+      TokenValue() : identifier_str(""), num_val(0.0) {}
+    };
+
+    Lexer(std::function<void(char, TokenValue)> parse_cb) : _parse_cb(parse_cb), _token_value(), _last_char(0) {}
 
     void operator()(std::iostream& ss);
 
   private:
-    std::function<void(char)> _parse_cb;
-    std::string _identifier_str;
-    double _num_val;
+    std::function<void(char, TokenValue)> _parse_cb;
+    TokenValue _token_value;
     int _last_char;
 
     int gettok(std::iostream& ss);

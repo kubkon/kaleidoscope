@@ -8,9 +8,8 @@ namespace kaleidoscope {
 
   void Lexer::operator()(std::iostream& ss) {
     char token;
-    while ((token = gettok(ss)) != Token::tok_eof) {
-      _parse_cb(token);
-    }
+    while ((token = gettok(ss)) != Token::tok_eof)
+      _parse_cb(token, _token_value);
   }
 
   int Lexer::gettok(std::iostream& ss) {
@@ -21,13 +20,13 @@ namespace kaleidoscope {
       _last_char = ss.get();
 
     if (isalpha(_last_char)) { // only alphanumerics, regex: [a-zA-z][a-zA-Z0-9]*
-      _identifier_str = _last_char;
+      _token_value.identifier_str = _last_char;
       while (isalnum((_last_char = ss.get())))
-        _identifier_str += _last_char;
+        _token_value.identifier_str += _last_char;
 
-      if (_identifier_str == "def")
+      if (_token_value.identifier_str == "def")
         return Token::tok_def;
-      if (_identifier_str == "extern")
+      if (_token_value.identifier_str == "extern")
         return Token::tok_extern;
       return Token::tok_identifier;
     }
@@ -39,7 +38,7 @@ namespace kaleidoscope {
         _last_char = ss.get();
       } while (isdigit(_last_char) || _last_char == '.');
 
-      _num_val = strtod(num_str.c_str(), 0);
+      _token_value.num_val = strtod(num_str.c_str(), 0);
       return Token::tok_number;
     }
 
