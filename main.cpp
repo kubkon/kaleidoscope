@@ -2,6 +2,8 @@
 #include <fstream>
 #include "lexer.h"
 
+using namespace kaleidoscope;
+
 int main(int argc, char **argv) {
   if (argc != 2) {
     std::cout << "Too few arguments; you need to specify the input filename.\n";
