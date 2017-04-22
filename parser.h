@@ -5,9 +5,14 @@
 namespace kaleidoscope {
   class Parser {
   public:
-    Parser() {}
+    Parser(Lexer& lexer) : _lexer(lexer), _cur_token(0) {}
 
-    void operator()(char token, Lexer::TokenValue tok_value);
+    void parse();
+  private:
+    Lexer& _lexer;
+    char _cur_token;
+
+    int get_next_token() { return _cur_token = _lexer.gettok(); }
   };
 }
 

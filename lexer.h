@@ -2,8 +2,6 @@
 
 #include <string>
 #include <istream>
-#include <functional>
-#include <memory>
 
 namespace kaleidoscope {
 
@@ -28,16 +26,14 @@ namespace kaleidoscope {
       TokenValue() : identifier_str(""), num_val(0.0) {}
     };
 
-    Lexer(std::function<void(char, TokenValue)> parse_cb) : _parse_cb(parse_cb), _token_value(), _last_char(0) {}
+    Lexer(std::iostream& stream) : _stream(stream), _token_value(), _last_char(0) {}
 
-    void operator()(std::iostream& ss);
+    int gettok();
 
   private:
-    std::function<void(char, TokenValue)> _parse_cb;
+    std::iostream& _stream;
     TokenValue _token_value;
     int _last_char;
-
-    int gettok(std::iostream& ss);
   };
 
 }
