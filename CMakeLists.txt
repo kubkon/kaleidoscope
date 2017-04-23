@@ -29,3 +29,8 @@ add_subdirectory(lib)
 
 add_executable(kaleidoscope main.cpp)
 target_link_libraries(kaleidoscope Kompiler)
+
+add_subdirectory(tests)
+add_test(NAME tests COMMAND tests)
+enable_testing(true)
+

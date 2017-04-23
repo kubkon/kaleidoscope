@@ -1,0 +1,10 @@
+include_directories("${PROJECT_BINARY_DIR}" ../lib)
+file(GLOB SOURCES "*.cpp")
+file(GLOB HEADERS "*.h")
+set(PROJECT_LINK_LIBS libKompiler.a)
+cmake_policy(SET CMP0015 NEW)
+link_directories(../build/lib)
+
+add_executable(tests ${SOURCES} ${HEADERS})
+target_link_libraries(tests gtest_main)
+target_link_libraries(tests ${PROJECT_LINK_LIBS})
