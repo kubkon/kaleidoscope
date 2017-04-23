@@ -14,4 +14,4 @@ script:
   - cd build
   - cmake ..
   - make
-  - ctest
+  - tests/tests
