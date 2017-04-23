@@ -8,7 +8,9 @@ addons:
       - llvm-toolchain-precise-3.6
     packages:
       - clang-3.6
-env: COMPILER=clang++-3.6
+env:
+  - CC=clang-3.6
+  - CXX=clang++-3.6
 script:
   - cd build
   - cmake ..
