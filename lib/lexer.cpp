@@ -33,6 +33,7 @@ namespace kaleidoscope {
         num_str += _last_char;
         _last_char = _stream.get();
       } while (isdigit(_last_char) || _last_char == '.');
+      _stream.unget();
 
       _token_value.num_val = strtod(num_str.c_str(), 0);
       return tok_number;
@@ -51,7 +52,7 @@ namespace kaleidoscope {
       return tok_eof;
 
     int this_char = _last_char;
-    _last_char = _stream.get();
+    /* _last_char = _stream.get(); */
     return this_char;
   }
 
