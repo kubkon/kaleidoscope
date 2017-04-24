@@ -35,7 +35,7 @@ namespace kaleidoscope {
 
       get_next_token();
 
-      if (_cur_token != ',' || _cur_token != ')')
+      if (_cur_token != ',' && _cur_token != ')')
         return log_error_p("Expected \",\" or \")\" in argument list in prototype");
 
     } while (_cur_token != ')');
