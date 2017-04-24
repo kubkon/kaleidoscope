@@ -23,6 +23,7 @@ namespace kaleidoscope {
     std::unique_ptr<PrototypeAST> parse_proto();
     std::unique_ptr<FunctionAST> parse_def();
     std::unique_ptr<PrototypeAST> parse_extern();
+    std::unique_ptr<FunctionAST> parse_top_level_expr();
   };
 }
 

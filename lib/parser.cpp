@@ -64,6 +64,14 @@ namespace kaleidoscope {
     return parse_proto();
   }
 
+  std::unique_ptr<FunctionAST> Parser::parse_top_level_expr() {
+    auto body = parse_expr();
+    if (!body)
+      return nullptr;
+    auto proto = std::make_unique<PrototypeAST>("__anon_expr", std::vector<std::string>{ });
+    return std::make_unique<FunctionAST>(std::move(proto), std::move(body));
+  }
+
   void Parser::parse() {
     while (true) {
       switch(_cur_token) {
@@ -87,9 +95,14 @@ namespace kaleidoscope {
           else {
             get_next_token();
           }
+          break;
         default:
-          std::cout << "Default hit!\n";
-          get_next_token();
+          if (parse_top_level_expr()) {
+            std::cout << "Parse a top level expression.\n";
+          }
+          else {
+            get_next_token();
+          }
           break;
       }
     }
