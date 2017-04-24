@@ -148,6 +148,7 @@ namespace kaleidoscope {
         return log_error_p("Expected \",\" or \")\" in argument list in prototype");
 
     } while (_cur_token != ')');
+    get_next_token();
 
     return std::make_unique<PrototypeAST>(fn_name, args);
   }
@@ -203,7 +204,7 @@ namespace kaleidoscope {
           break;
         default:
           if (parse_top_level_expr()) {
-            std::cout << "Parse a top level expression.\n";
+            std::cout << "Parsed a top level expression.\n";
           }
           else {
             get_next_token();

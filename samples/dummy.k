@@ -1,4 +1,4 @@
-1 + 2
+1 + 2 * 3
 
 # this is a comment
 def fib(x)
