@@ -8,17 +8,9 @@
 namespace kaleidoscope {
   class Parser {
   public:
-    Parser(Lexer& lexer) : _lexer(lexer), _cur_token(0) {}
+    Parser(Lexer& lexer) : _lexer(lexer) { get_next_token(); }
 
     void parse();
-  private:
-    Lexer& _lexer;
-    char _cur_token;
-
-    static std::map<char, int> binary_op_precedence;
-    int get_op_precedence(const char op) const;
-
-    int get_next_token() { return _cur_token = _lexer.gettok(); }
 
     std::unique_ptr<ExprAST> log_error(const char* str);
     std::unique_ptr<PrototypeAST> log_error_p(const char* str);
@@ -34,6 +26,14 @@ namespace kaleidoscope {
     std::unique_ptr<FunctionAST> parse_def();
     std::unique_ptr<PrototypeAST> parse_extern();
     std::unique_ptr<FunctionAST> parse_top_level_expr();
+  private:
+    Lexer& _lexer;
+    char _cur_token;
+
+    static std::map<char, int> binary_op_precedence;
+    int get_op_precedence(const char op) const;
+
+    int get_next_token() { return _cur_token = _lexer.gettok(); }
   };
 }
 
