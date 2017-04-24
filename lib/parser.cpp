@@ -21,8 +21,72 @@ namespace kaleidoscope {
     return nullptr;
   }
 
+  std::unique_ptr<ExprAST> Parser::parse_number_expr() {
+    auto number = std::make_unique<NumberExprAST>(_lexer.token_value().num_val);
+    get_next_token();
+    return std::move(number);
+  }
+
+  std::unique_ptr<ExprAST> Parser::parse_identifier_expr() {
+    auto id_name = _lexer.token_value().identifier_str;
+    get_next_token();
+
+    if (_cur_token != '(')
+      return std::make_unique<VariableExprAST>(id_name);
+
+    get_next_token();
+    std::vector<std::unique_ptr<ExprAST>> args;
+    if (_cur_token != ')') {
+      while (true) {
+        if (auto arg = parse_expr()) {
+          args.push_back(std::move(arg));
+        }
+        else {
+          return nullptr;
+        }
+
+        if (_cur_token == ')')
+          break;
+
+        if (_cur_token != ',')
+          return log_error("Expected \")\" or \",\" in argument list to function call");
+
+        get_next_token();
+      }
+    }
+
+    get_next_token();
+    return std::make_unique<CallExprAST>(id_name, std::move(args));
+  }
+
+  std::unique_ptr<ExprAST> Parser::parse_paren_expr() {
+    get_next_token();
+    auto expr = parse_expr();
+    if (!expr)
+      return nullptr;
+
+    if (_cur_token != ')')
+      return log_error("Expected \")\"");
+    get_next_token();
+    return std::move(expr);
+  }
+
   std::unique_ptr<ExprAST> Parser::parse_expr() {
+    
     return log_error("Sorry, don't know how to parse expressions yet!");
+  }
+
+  std::unique_ptr<ExprAST> Parser::parse_primary() {
+    switch (_cur_token) {
+      case Lexer::tok_identifier:
+        return parse_identifier_expr();
+      case Lexer::tok_number:
+        return parse_number_expr();
+      case '(':
+        return parse_paren_expr();
+      default:
+        return log_error("Unknown token when expecting an expression");
+    }
   }
 
   std::unique_ptr<PrototypeAST> Parser::parse_proto() {
