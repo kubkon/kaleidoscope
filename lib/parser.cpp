@@ -4,12 +4,20 @@
 #include <memory>
 
 namespace kaleidoscope {
-  std::map<char, size_t> Parser::binary_op_precedence = {
+  std::map<char, int> Parser::binary_op_precedence = {
       {'<', 10},
       {'+', 20},
       {'-', 20},
       {'*', 40}
   };
+
+  int Parser::get_op_precedence(const char op) const {
+      int prec = -1;
+      auto found = binary_op_precedence.find(op);
+      if (found != binary_op_precedence.cend())
+        prec = found->second;
+      return prec;
+  }
 
   std::unique_ptr<ExprAST> Parser::log_error(const char* str) {
     std::cerr << "Error: " << str << "\n";
@@ -72,8 +80,10 @@ namespace kaleidoscope {
   }
 
   std::unique_ptr<ExprAST> Parser::parse_expr() {
-    
-    return log_error("Sorry, don't know how to parse expressions yet!");
+    auto lhs = parse_primary();
+    if (!lhs)
+      return nullptr;
+    return parse_bin_op_rhs(0, std::move(lhs));
   }
 
   std::unique_ptr<ExprAST> Parser::parse_primary() {
@@ -86,6 +96,30 @@ namespace kaleidoscope {
         return parse_paren_expr();
       default:
         return log_error("Unknown token when expecting an expression");
+    }
+  }
+
+  std::unique_ptr<ExprAST> Parser::parse_bin_op_rhs(int precedence, std::unique_ptr<ExprAST> lhs) {
+    while (true) {
+      auto curr_prec = get_op_precedence(_cur_token);
+      if (curr_prec <= precedence) // precedence of previous op higher
+        return std::move(lhs);
+
+      int op = _cur_token; // preserve the op
+      get_next_token();
+      auto rhs = parse_primary();
+      if (!rhs)
+        return nullptr;
+
+      auto next_prec = get_op_precedence(_cur_token);
+      if (curr_prec <= next_prec) { // curr op less binding
+        rhs = parse_bin_op_rhs(curr_prec, std::move(rhs));
+        if (!rhs)
+          return nullptr;
+      }
+
+      // reduce!
+      lhs = std::make_unique<BinaryExprAST>(op, std::move(lhs), std::move(rhs));
     }
   }
 

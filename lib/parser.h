@@ -15,7 +15,8 @@ namespace kaleidoscope {
     Lexer& _lexer;
     char _cur_token;
 
-    static std::map<char, size_t> binary_op_precedence;
+    static std::map<char, int> binary_op_precedence;
+    int get_op_precedence(const char op) const;
 
     int get_next_token() { return _cur_token = _lexer.gettok(); }
 
@@ -27,6 +28,7 @@ namespace kaleidoscope {
     std::unique_ptr<ExprAST> parse_paren_expr();
     std::unique_ptr<ExprAST> parse_expr();
     std::unique_ptr<ExprAST> parse_primary();
+    std::unique_ptr<ExprAST> parse_bin_op_rhs(int precedence, std::unique_ptr<ExprAST> lhs);
 
     std::unique_ptr<PrototypeAST> parse_proto();
     std::unique_ptr<FunctionAST> parse_def();
