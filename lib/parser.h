@@ -19,8 +19,10 @@ namespace kaleidoscope {
     std::unique_ptr<ExprAST> log_error(const char* str);
     std::unique_ptr<PrototypeAST> log_error_p(const char* str);
 
+    std::unique_ptr<ExprAST> parse_expr();
     std::unique_ptr<PrototypeAST> parse_proto();
     std::unique_ptr<FunctionAST> parse_def();
+    std::unique_ptr<PrototypeAST> parse_extern();
   };
 }
 

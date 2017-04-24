@@ -14,6 +14,10 @@ namespace kaleidoscope {
     return nullptr;
   }
 
+  std::unique_ptr<ExprAST> Parser::parse_expr() {
+    return log_error("Sorry, don't know how to parse expressions yet!");
+  }
+
   std::unique_ptr<PrototypeAST> Parser::parse_proto() {
     // parse function name
     if (_cur_token != Lexer::tok_identifier)
@@ -46,7 +50,18 @@ namespace kaleidoscope {
   std::unique_ptr<FunctionAST> Parser::parse_def() {
     get_next_token();
     auto proto = parse_proto();
-    return nullptr;
+    if (!proto)
+      return nullptr;
+
+    auto body = parse_expr();
+    if (!body)
+      return nullptr;
+    return std::make_unique<FunctionAST>(std::move(proto), std::move(body));
+  }
+
+  std::unique_ptr<PrototypeAST> Parser::parse_extern() {
+    get_next_token();
+    return parse_proto();
   }
 
   void Parser::parse() {
@@ -65,6 +80,13 @@ namespace kaleidoscope {
             get_next_token();
           }
           break;
+        case Lexer::tok_extern:
+          if (parse_extern()) {
+            std::cout << "Parsed an extern.\n";
+          }
+          else {
+            get_next_token();
+          }
         default:
           std::cout << "Default hit!\n";
           get_next_token();
