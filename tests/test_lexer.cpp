@@ -5,6 +5,15 @@
 #include "lexer.h"
 
 namespace kaleidoscope {
+  TEST(Comments, Comments) {
+    std::stringstream ss;
+    ss << "# this is a comment\n#and so is this but with a number 0.0\n1";
+    Lexer lexer(ss);
+    ASSERT_EQ(Lexer::tok_number, lexer.gettok());
+    ASSERT_EQ(lexer.token_value().num_val, 1);
+    ASSERT_EQ(Lexer::tok_eof, lexer.gettok());
+  }
+
   TEST(FunctionPrototype, SingleArgument) {
     std::vector<std::string> inputs = {
       "def fib(x)\n",
