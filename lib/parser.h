@@ -3,6 +3,7 @@
 #include "ast.h"
 #include "lexer.h"
 #include <memory>
+#include <map>
 
 namespace kaleidoscope {
   class Parser {
@@ -13,6 +14,8 @@ namespace kaleidoscope {
   private:
     Lexer& _lexer;
     char _cur_token;
+
+    static std::map<char, size_t> binary_op_precedence;
 
     int get_next_token() { return _cur_token = _lexer.gettok(); }
 

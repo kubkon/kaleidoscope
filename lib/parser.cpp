@@ -4,6 +4,13 @@
 #include <memory>
 
 namespace kaleidoscope {
+  std::map<char, size_t> Parser::binary_op_precedence = {
+      {'<', 10},
+      {'+', 20},
+      {'-', 20},
+      {'*', 40}
+  };
+
   std::unique_ptr<ExprAST> Parser::log_error(const char* str) {
     std::cerr << "Error: " << str << "\n";
     return nullptr;
